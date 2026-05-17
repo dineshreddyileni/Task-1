@@ -5,7 +5,7 @@ public class HotelReservationSystem {
         String category;
         double price;
         boolean available;
-        Room(int roomId, String category, double price) {
+        public Room(int roomId, String category, double price) {
             this.roomId = roomId;
             this.category = category;
             this.price = price;
@@ -15,7 +15,8 @@ public class HotelReservationSystem {
     static class User {
         int userId;
         String name;
-        User(int userId, String name) {
+
+        public User(int userId, String name) {
             this.userId = userId;
             this.name = name;
         }
@@ -25,7 +26,7 @@ public class HotelReservationSystem {
         User user;
         Room room;
         String status;
-        Reservation(int reservationId, User user, Room room) {
+        public Reservation(int reservationId, User user, Room room) {
             this.reservationId = reservationId;
             this.user = user;
             this.room = room;
@@ -33,27 +34,33 @@ public class HotelReservationSystem {
         }
     }
     public static void main(String[] args) {
-        ArrayList<Room> rooms = new ArrayList<>();
+        ArrayList<Room> rooms = new ArrayList<Room>();
+        ArrayList<Reservation> reservations = new ArrayList<Reservation>();
         rooms.add(new Room(101, "Standard", 1000));
         rooms.add(new Room(102, "Deluxe", 2000));
         rooms.add(new Room(103, "Suite", 3000));
         User user = new User(1, "Dinesh");
-        ArrayList<Reservation> reservations = new ArrayList<>();
-        System.out.println("Available Deluxe Rooms:");
+        System.out.println("Available Rooms:");
         for (Room room : rooms) {
-            if (room.category.equals("Deluxe") && room.available) {
-                System.out.println("Room ID: " + room.roomId);
+            if (room.available) {
+                System.out.println(
+                        room.roomId + " - " +
+                        room.category + " - ₹" +
+                        room.price);
             }
         }
         for (Room room : rooms) {
             if (room.roomId == 102 && room.available) {
-                System.out.println("\nProcessing payment of ₹" + room.price);
+                System.out.println("\nPayment of ₹" + room.price);
                 System.out.println("Payment Successful");
                 room.available = false;
-                Reservation reservation =
+                Reservation booking =
                         new Reservation(1, user, room);
-                reservations.add(reservation);
-                System.out.println("Booking Successful");
+
+                reservations.add(booking);
+
+                System.out.println("Room Booked Successfully");
+                break;
             }
         }
         System.out.println("\nBooking Details:");
@@ -62,23 +69,19 @@ public class HotelReservationSystem {
                     "Reservation ID: " + r.reservationId +
                     ", User: " + r.user.name +
                     ", Room: " + r.room.roomId +
-                    ", Status: " + r.status
-            );
+                    ", Status: " + r.status);
         }
-        if (!reservations.isEmpty()) {
+        if (reservations.size() > 0) {
             Reservation r = reservations.get(0);
             r.status = "Cancelled";
             r.room.available = true;
-            System.out.println("\nReservation Cancelled");
+            System.out.println("\nBooking Cancelled");
         }
-        System.out.println("\nUpdated Booking Details:");
+        System.out.println("\nUpdated Booking:");
         for (Reservation r : reservations) {
             System.out.println(
                     "Reservation ID: " + r.reservationId +
-                    ", User: " + r.user.name +
-                    ", Room: " + r.room.roomId +
-                    ", Status: " + r.status
-            );
+                    ", Status: " + r.status);
         }
     }
 }
